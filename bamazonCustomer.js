@@ -62,7 +62,8 @@ function begin() {
     })
 }
 
+//end the application with a thank you to the user in green (green is known for a gentle user experience)
 function quit() {
-    console.log("Thanks for stopping by! See you next time!");
+    console.log(chalk.greenBright("Thanks for stopping by! See you next time!"));
     connection.end();
 }
