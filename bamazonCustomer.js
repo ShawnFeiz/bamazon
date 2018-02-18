@@ -2,6 +2,8 @@ const inquirer = require("inquirer");
 const mysql = require("mysql");
 const chalk = require("chalk");
 
+//===================================================================
+
 var connection = mysql.createConnection({
     host: "localhost",
     port: 3306,
@@ -33,7 +35,7 @@ function start() {
         }
     ]).then(function(answer){
         if(answer.yesOrNo.toUpperCase() === "YES"){
-            begin();
+            showProducts();
             
         } else {
             quit();
@@ -41,29 +43,49 @@ function start() {
 
     })
 }
+//===================================================================
 
 function showProducts() {
-      connection.query("SELECT * FROM products", function(err, results) {
-        if (err) throw err;
-        console.log(results);
-      });
-    
+    connection.query("SELECT * FROM products", function(err, results) {
+    if (err) throw err;
+    console.log(results);
+    begin();
+    });
 }
 
-function begin() {
-    showProducts();
+//===================================================================
 
-    inquirer.promt([
+function begin() {
+
+// The first should ask them the ID of the product they would like to buy.
+// The second message should ask how many units of the product they would like to buy.
+    inquirer.prompt([
         {
-        
+            name: "askID",
+            type: "input",
+            message: "Interested in an item? Enter the ID of the product you would like to purchase: "
+        },
+        {
+            name: "units",
+            type: "input",
+            message: "How many would you like to buy? "
         }
     ]).then(function(answer){
+        console.log(answer.askID);
+        console.log(answer.units);
+
+        //if the quanity wanted is less than the database stock amount then we're good to proceed
+        //else we have to alert the user that there is 'Insufficient quanitity!'
+
 
     })
 }
+//===================================================================
 
 //end the application with a thank you to the user in green (green is known for a gentle user experience)
 function quit() {
-    console.log(chalk.greenBright("Thanks for stopping by! See you next time!"));
+    console.log(chalk.hex('#32CD32')("Thanks for stopping by! See you next time!"));
     connection.end();
 }
+
+//===================================================================
