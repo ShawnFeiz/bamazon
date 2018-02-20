@@ -46,9 +46,15 @@ function start() {
 //===================================================================
 
 function showProducts() {
-    connection.query("SELECT * FROM products", function(err, results) {
+    connection.query("SELECT item_id, product_name, price FROM products", function(err, results) {
     if (err) throw err;
-    console.log(results);
+
+    console.log(`
+    ID: ${results.item_id}\n
+    Name: ${results.product_name}\n
+    Price: ${results.price}\n`);
+
+    // console.log(results);
     begin();
     });
 }
