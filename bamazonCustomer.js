@@ -1,10 +1,12 @@
 const inquirer = require("inquirer");
 const mysql = require("mysql");
 const chalk = require("chalk");
+//set tax rate. Let's say it 8% for now.
 const tax_rate = 0.08;
 
 //===================================================================
 
+//connect to the local bamazon sql db server
 var connection = mysql.createConnection({
     host: "localhost",
     port: 3306,
@@ -25,7 +27,10 @@ connection.connect(function(err) {
   });
 
 //===================================================================
+//FUNCTIONS FUNCTIONS FUNCTIONS
+//===================================================================
 
+//Either quit the connection or show the user the products available
 function start() {
     inquirer.prompt([
         {
@@ -46,6 +51,7 @@ function start() {
 }
 //===================================================================
 
+//once the products are shown we run the begin() function which will prompt the user to purchase products
 function showProducts() {
     connection.query("SELECT item_id, product_name, price FROM products", function(err, results) {
     if (err) throw err;
@@ -75,22 +81,31 @@ function begin() {
             message: "How many would you like to buy? "
         }
     ]).then(function(answer){
+        //query the entire db
         connection.query("SELECT * FROM products", function(err, results) {
+        //coerce the strings into integers and store them in variables for later use
         var newUnits = parseInt(answer.units);
         var newID = parseInt(answer.askID);
        
+        //if the number of units the user wants is greater than the stock_quantity then we cannot fulfill the order. 
+        //else update the db and show the order todal ($). Factor in tax
         if(newUnits > results[newID - 1].stock_quantity){
             console.log('Insufficient quantity!');
+            //allow the user to go back and keep shopping because at this point they were interested in purchasing
             begin();
+
           } else {
               const newStockQuantity = results[newID - 1].stock_quantity - newUnits;
+              //update the database stock quanity 
                 connection.query(`UPDATE products SET stock_quantity = ${newStockQuantity} WHERE item_id = ${newID}`, function(err, res){
                     
                     console.log("------------------------------");
+                    //quick math to calculate the total cost of the order
                     const total = newUnits * results[newID -1].price + (tax_rate * results[newID -1].price);
                     console.log(`Your total is: $${total}`);
                     console.log(`Will that be ${chalk.green(`cash, card, or bitcoin?`)} Ha! Just kidding. Thanks for shopping!\n`);
                     
+                    //ask our guest if they want to continue shopping. if not then quit by ending the connection.
                     inquirer.prompt([
                         {
                             name: "keepShopping",
