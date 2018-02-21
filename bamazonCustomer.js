@@ -87,7 +87,7 @@ function begin() {
                 connection.query(`UPDATE products SET stock_quantity = ${newStockQuantity} WHERE item_id = ${newID}`, function(err, res){
                     
                     console.log("------------------------------");
-                    const total = newUnits * results[newID -1].price;
+                    const total = newUnits * results[newID -1].price + (tax_rate * results[newID -1].price);
                     console.log(`Your total is: $${total}`);
                     console.log(`Will that be ${chalk.green(`cash, card, or bitcoin?`)} Ha! Just kidding. Thanks for shopping!\n`);
                     
