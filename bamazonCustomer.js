@@ -51,7 +51,7 @@ function showProducts() {
     if (err) throw err;
 
     results.forEach(function(e){
-        console.log(`${e.item_id} ${e.product_name} $${e.price}\n----------------------\n`);
+        console.log(`${e.item_id} ${e.product_name} ${chalk.green(`$`)}${chalk.green(e.price)}\n----------------------\n`);
     })
 
     begin();
@@ -83,19 +83,34 @@ function begin() {
             console.log('Insufficient quantity!');
             begin();
           } else {
-              var newStockQuantity = results[newID - 1].stock_quantity - newUnits;
-              connection.query(`UPDATE products SET stock_quantity = ${newStockQuantity} WHERE item_id = ${newID}`, function(err, res){
-                  console.log("------------------------------");
-                  var total = newUnits * results[newID -1].price;
-                  console.log(`Your total is: $${total}`);
-              });
-          };
+              const newStockQuantity = results[newID - 1].stock_quantity - newUnits;
+                connection.query(`UPDATE products SET stock_quantity = ${newStockQuantity} WHERE item_id = ${newID}`, function(err, res){
+                    
+                    console.log("------------------------------");
+                    const total = newUnits * results[newID -1].price;
+                    console.log(`Your total is: $${total}`);
+                    console.log(`Will that be ${chalk.green(`cash, card, or bitcoin?`)} Ha! Just kidding. Thanks for shopping!\n`);
+                    
+                    inquirer.prompt([
+                        {
+                            name: "keepShopping",
+                            type: "input",
+                            message: chalk.bgYellow("Would you like to continue shopping? [YES] or [NO]?"),
+                            choices: ["YES", "NO"]
+                        }
+                    ]).then(function(answer){
+                        if(answer.keepShopping.toUpperCase() === "YES"){
+                            begin();    
+                        } else {
+                            quit();
+                            }
+                        })
+                    });
+                };
+            });
+        })
+    }
 
-
-
-         });
-    })
-}
 //===================================================================
 
 //end the application with a thank you to the user in green (green is known for a gentle user experience)
