@@ -15,4 +15,4 @@ The application will either:
 1) Thank you for your purchase along with how much you owe or
 2) Indicate that our store does not have sufficient quantity.
 
- <img src="app_walkthrough.gif?raw=true" alt="Customer Order" width="400px" />
+ <img src="app_walkthrough.gif?raw=true" alt="Customer Order"/>
