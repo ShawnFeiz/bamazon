@@ -86,16 +86,18 @@ function begin() {
         // console.log(answer.units);
         //if the quanity wanted is less than the database stock amount then we're good to proceed
         //else we have to alert the user that there is 'Insufficient quanitity!'
-        let newUnits = parseInt(answer.units);
+        var newUnits = parseInt(answer.units);
+        var newID = parseInt(answer.askID);
        
-        if(newUnits > results[newUnits - 1].stock_quantity){
+        if(newUnits > results[newID - 1].stock_quantity){
             console.log('Insufficient quantity!');
+            begin();
           } else {
-              var newStockQuantity = results[newUnits - 1].stock_quantity - newUnits;
+              var newStockQuantity = results[newID - 1].stock_quantity - newUnits;
               console.log(newStockQuantity);
           }
 
-        // console.log(results[newUnits - 1].stock_quantity);
+        // console.log(results[newID - 1]);
 
         // console.log(typeof(test));
 
