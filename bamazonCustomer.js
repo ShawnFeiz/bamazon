@@ -95,7 +95,7 @@ function begin() {
                         {
                             name: "keepShopping",
                             type: "input",
-                            message: chalk.bgYellow("Would you like to continue shopping? [YES] or [NO]?"),
+                            message: chalk.bgMagenta("Would you like to continue shopping? [YES] or [NO]?"),
                             choices: ["YES", "NO"]
                         }
                     ]).then(function(answer){
@@ -115,7 +115,7 @@ function begin() {
 
 //end the application with a thank you to the user in green (green is known for a gentle user experience)
 function quit() {
-    console.log(chalk.hex('#32CD32')("Thanks for stopping by! See you next time!"));
+    console.log(chalk.hex('#32CD32')("\nThanks for stopping by! See you next time!\n"));
     connection.end();
 }
 
