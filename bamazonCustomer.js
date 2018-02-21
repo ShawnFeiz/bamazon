@@ -1,6 +1,7 @@
 const inquirer = require("inquirer");
 const mysql = require("mysql");
 const chalk = require("chalk");
+const tax_rate = 0.08;
 
 //===================================================================
 
@@ -49,16 +50,9 @@ function showProducts() {
     connection.query("SELECT item_id, product_name, price FROM products", function(err, results) {
     if (err) throw err;
 
-
-    // console.log(`Item Id Product Price`);
-    // console.log(`${results[0].item_id} ${results[0].product_name} $${results[0].price}`);
-    // console.log(`${results[1].item_id} ${results[1].product_name} $${results[1].price}`);
-    // console.log(`${results[2].item_id} ${results[2].product_name} $${results[2].price}`);
-
     results.forEach(function(e){
         console.log(`${e.item_id} ${e.product_name} $${e.price}\n----------------------\n`);
     })
-
 
     begin();
     });
@@ -82,10 +76,6 @@ function begin() {
         }
     ]).then(function(answer){
         connection.query("SELECT * FROM products", function(err, results) {
-        // console.log(answer.askID);
-        // console.log(answer.units);
-        //if the quanity wanted is less than the database stock amount then we're good to proceed
-        //else we have to alert the user that there is 'Insufficient quanitity!'
         var newUnits = parseInt(answer.units);
         var newID = parseInt(answer.askID);
        
@@ -94,12 +84,12 @@ function begin() {
             begin();
           } else {
               var newStockQuantity = results[newID - 1].stock_quantity - newUnits;
-              console.log(newStockQuantity);
-          }
-
-        // console.log(results[newID - 1]);
-
-        // console.log(typeof(test));
+              connection.query(`UPDATE products SET stock_quantity = ${newStockQuantity} WHERE item_id = ${newID}`, function(err, res){
+                  console.log("------------------------------");
+                  var total = newUnits * results[newID -1].price;
+                  console.log(`Your total is: $${total}`);
+              });
+          };
 
 
 

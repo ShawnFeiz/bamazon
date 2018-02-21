@@ -17,5 +17,15 @@ create table products (
     primary key (item_id)
 );
 
--- general select all statement to see the entire table
+-- set initial row data for table
+insert into products (product_name, department_name, price)
+values ("alexa", "electronics", 150), ("iPhone X", "electronics", 999), ("Rasberry Pi3", "electronics", 35), 
+("mens jeans", "apparel", 20), ("womens joggers", "apparel", 20), ("Unisex Cubs Beanie", "apparel", 18),
+("desk", "home_goods", 35), ("lamp", "home_goods", 25), ("bed", "home_goods", 175), ("rug", "home_goods", 20);
+
+-- update stock_quantity column with 100 units of each product for easy testing/grading
+update products
+set stock_quantity = 100;
+
+-- view the products table from the bamazon_db
 select * from products;
